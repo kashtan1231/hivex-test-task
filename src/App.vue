@@ -37,6 +37,11 @@
         <BaseInput v-model="accountName" placeholder="Account Number" />
         <BaseInput v-model="accountName" placeholder="Account Number" />
       </div>
+
+      <div class="page__tooltip">
+        <BaseCheckbox text="Bypass E911 Adress Automation" />
+        <BaseTooltip :text="tooltipText" />
+      </div>
     </div>
   </div>
 </template>
@@ -45,12 +50,21 @@
 import { Component, Vue } from 'vue-property-decorator'
 import BaseInput from '@/components/BaseInput.vue'
 import BaseSelect from '@/components/BaseSelect.vue'
+import BaseCheckbox from '@/components/BaseCheckbox.vue'
+import BaseTooltip from '@/components/BaseTooltip.vue'
 
 @Component({
-  components: { BaseInput, BaseSelect }
+  components: {
+    BaseInput,
+    BaseSelect,
+    BaseCheckbox,
+    BaseTooltip
+  }
 })
 export default class App extends Vue {
   accountName = ''
+  tooltipText =
+    '(By checking "Bypass E911 Address Automation" you agree to manually add this phone number and address to Bandwidth)'
   options = [
     {
       id: 1,
@@ -116,6 +130,12 @@ export default class App extends Vue {
   &__auto-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    column-gap: 24px;
+  }
+
+  &__tooltip {
+    display: grid;
+    grid-template-columns: calc(33% - 12px) 1fr;
     column-gap: 24px;
   }
 }

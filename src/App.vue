@@ -42,6 +42,8 @@
         <BaseCheckbox text="Bypass E911 Adress Automation" />
         <BaseTooltip :text="tooltipText" />
       </div>
+
+      <BaseButton text="Provision" />
     </div>
   </div>
 </template>
@@ -52,13 +54,15 @@ import BaseInput from '@/components/BaseInput.vue'
 import BaseSelect from '@/components/BaseSelect.vue'
 import BaseCheckbox from '@/components/BaseCheckbox.vue'
 import BaseTooltip from '@/components/BaseTooltip.vue'
+import BaseButton from '@/components/BaseButton.vue'
 
 @Component({
   components: {
     BaseInput,
     BaseSelect,
     BaseCheckbox,
-    BaseTooltip
+    BaseTooltip,
+    BaseButton
   }
 })
 export default class App extends Vue {
@@ -105,13 +109,18 @@ export default class App extends Vue {
   box-sizing: border-box;
 }
 
+button {
+  border: none;
+}
+
 #app {
   display: flex;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   font-family: $font-family-default;
   flex-direction: column;
   width: 100%;
+  background-color: $white;
   padding: 20px 40px;
 }
 
@@ -120,7 +129,7 @@ export default class App extends Vue {
   max-width: 1216px;
 
   > :not(:last-child) {
-    margin-bottom: 40px;
+    margin-bottom: 32px;
   }
 
   &__title {

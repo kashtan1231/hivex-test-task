@@ -223,7 +223,11 @@ button {
   }
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 769px) {
+  #app {
+    padding: 20px 16px;
+  }
+
   .page {
     &__grid-auto,
     &__grid-1to2 {

@@ -1,9 +1,13 @@
 <template>
-  <div class="base-select" @click="switchOptions">
+  <div
+    class="base-select"
+    v-click-outside="closeOptions"
+    @click="switchOptions"
+  >
     <div class="base-select__wrapper">
       <label class="base-select__wrapper-label">{{ label }}</label>
       <p class="base-select__wrapper-selected-item">
-        {{ selectedOption || defaultOptionText }}
+        {{ value || defaultOptionText }}
       </p>
     </div>
 
@@ -24,21 +28,29 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import vClickOutside from 'v-click-outside'
 
 @Component
 export default class BaseSelect extends Vue {
+  @Prop({ default: '' }) value!: string
   @Prop({ default: '' }) label!: string
   @Prop({ default: '' }) defaultOptionText!: string
   @Prop({ default: '' }) options!: Array<unknown>
 
   isShowOptions = false
-  selectedOption = ''
 
   switchOptions(): void {
     this.isShowOptions = !this.isShowOptions
   }
+  closeOptions(): void {
+    this.isShowOptions = false
+  }
   selectOption(name: string): void {
-    this.selectedOption = name
+    this.$emit('input', name)
+  }
+
+  created(): void {
+    Vue.use(vClickOutside)
   }
 }
 </script>
@@ -91,6 +103,7 @@ export default class BaseSelect extends Vue {
     box-shadow: 0px 2px 6px $gray;
     max-height: 160px;
     overflow-y: auto;
+    z-index: 10;
 
     &__item {
       padding: 4px 16px;

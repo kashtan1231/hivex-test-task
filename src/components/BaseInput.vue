@@ -20,9 +20,15 @@ export default class BaseInput extends Vue {
   @Prop({ default: '' }) value!: string
   @Prop({ default: '' }) label!: string
   @Prop({ default: 0 }) maxLength!: number
+  @Prop({ default: false }) isNumber!: boolean
 
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement
+
+    const numberEx = /[^0-9]/g
+    if (this.isNumber) {
+      target.value = target.value.replace(numberEx, '')
+    }
 
     if (this.maxLength && target.value.length > this.maxLength) {
       target.value = target.value.slice(0, this.maxLength)

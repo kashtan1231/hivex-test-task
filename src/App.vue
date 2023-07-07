@@ -4,46 +4,78 @@
       <h1 class="page__title">Voice Provisioning</h1>
 
       <BaseSelect
+        v-model="partner"
         label="Select a Partner"
         defaultOptionText="Choose"
         :options="options"
       />
 
-      <BaseInput v-model="accountName" placeholder="Account Number" />
+      <BaseInput
+        v-model="accountName"
+        :isNumber="true"
+        placeholder="Account Number"
+      />
 
-      <div class="page__auto-grid">
-        <BaseInput v-model="accountName" placeholder="Account Number" />
-        <BaseInput v-model="accountName" placeholder="Account Number" />
+      <div class="page__grid-auto">
+        <BaseInput v-model="firstName" placeholder="First Name" />
+        <BaseInput v-model="lastName" placeholder="Last Name" />
       </div>
 
-      <div class="page__auto-grid">
-        <BaseInput v-model="accountName" placeholder="Account Number" />
-        <BaseInput v-model="accountName" placeholder="Account Number" />
-        <BaseInput v-model="accountName" placeholder="Account Number" />
-        <BaseInput v-model="accountName" placeholder="Account Number" />
+      <div class="page__grid-auto">
+        <BaseInput v-model="address" placeholder="Address" />
+        <BaseInput v-model="city" placeholder="City" />
+        <BaseInput v-model="state" placeholder="State" />
+        <BaseInput v-model="zip" :isNumber="true" placeholder="Zip" />
       </div>
 
-      <div class="page__auto-grid">
-        <BaseInput v-model="accountName" placeholder="Account Number" />
-        <BaseInput v-model="accountName" placeholder="Account Number" />
+      <div class="page__grid-auto">
+        <BaseInput
+          v-model="phone"
+          :maxLength="11"
+          :isNumber="true"
+          placeholder="Contact Phone"
+        />
+        <BaseInput v-model="email" placeholder="Contact Email" />
       </div>
 
-      <div class="page__auto-grid">
+      <div class="page__grid-auto">
         <BaseSelect
-          label="Select a Partner"
+          v-model="customerType"
+          label="Customer Type"
           defaultOptionText="Choose"
           :options="options"
         />
-        <BaseInput v-model="accountName" placeholder="Account Number" />
-        <BaseInput v-model="accountName" placeholder="Account Number" />
+        <BaseInput
+          v-model="provisionNumber"
+          :isNumber="true"
+          placeholder="Phone Number to Provision"
+        />
+        <BaseInput
+          v-model="password"
+          type="password"
+          placeholder="Sip Password"
+        />
       </div>
 
-      <div class="page__tooltip">
-        <BaseCheckbox text="Bypass E911 Adress Automation" />
+      <div class="page__grid-1to2">
+        <BaseSelect
+          v-model="ported"
+          label="Ported"
+          defaultOptionText="Choose"
+          :options="options"
+        />
+      </div>
+
+      <div class="page__grid-1to2">
+        <BaseCheckbox text="Bypass E911 Adress Automation" @mark="switchMark" />
         <BaseTooltip :text="tooltipText" />
       </div>
 
-      <BaseButton text="Provision" />
+      <BaseButton
+        class="page__button"
+        text="Provision"
+        @click.native="provision"
+      />
     </div>
   </div>
 </template>
@@ -66,7 +98,21 @@ import BaseButton from '@/components/BaseButton.vue'
   }
 })
 export default class App extends Vue {
+  partner = ''
   accountName = ''
+  firstName = ''
+  lastName = ''
+  address = ''
+  city = ''
+  state = ''
+  zip = ''
+  phone = ''
+  email = ''
+  customerType = ''
+  provisionNumber = ''
+  password = ''
+  ported = ''
+  isMarked = false
   tooltipText =
     '(By checking "Bypass E911 Address Automation" you agree to manually add this phone number and address to Bandwidth)'
   options = [
@@ -99,6 +145,34 @@ export default class App extends Vue {
       name: 'seven'
     }
   ]
+
+  get canGoNext(): boolean {
+    return Boolean(
+      this.partner &&
+        this.accountName &&
+        this.firstName &&
+        this.lastName &&
+        this.address &&
+        this.city &&
+        this.state &&
+        this.zip &&
+        this.phone &&
+        this.email &&
+        this.customerType &&
+        this.provisionNumber &&
+        this.password &&
+        this.ported &&
+        this.isMarked
+    )
+  }
+
+  switchMark(emitedMark: boolean): void {
+    this.isMarked = emitedMark
+  }
+  provision(): void {
+    if (this.canGoNext) alert('Congrats!')
+    else alert('You must fill up form and accept E911')
+  }
 }
 </script>
 
@@ -136,16 +210,30 @@ button {
     text-align: center;
   }
 
-  &__auto-grid {
+  &__grid-auto {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     column-gap: 24px;
   }
 
-  &__tooltip {
+  &__grid-1to2 {
     display: grid;
     grid-template-columns: calc(33% - 12px) 1fr;
     column-gap: 24px;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .page {
+    &__grid-auto,
+    &__grid-1to2 {
+      display: flex;
+      flex-direction: column;
+
+      > :not(:last-child) {
+        margin-bottom: 32px;
+      }
+    }
   }
 }
 </style>

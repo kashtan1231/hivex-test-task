@@ -31,4 +31,10 @@ export default class BaseButton extends Vue {
     text-transform: uppercase;
   }
 }
+
+@media screen and (max-width: 960px) {
+  .base-button {
+    width: 100%;
+  }
+}
 </style>
